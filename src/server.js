@@ -1,14 +1,15 @@
 const express = require('express')
+
 const db = require('./database/db')
 const routes = require('./routes/routes')
 
-
 const app = express()
-
-app.use(express.static(__dirname + '/public'));
 
 // conexão com o banco de dados
 db.connect()
+
+// habilita server para receber dados json
+app.use(express.json())
 
 // definindo as rotas
 app.use('/api', routes)
