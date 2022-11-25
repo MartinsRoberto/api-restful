@@ -6,6 +6,7 @@ async function get(req, res) {
   const obj = id ? { _id: id } : null
 
   const products = await ProductsModel.find(obj)
+
   res.send(products)
 }
 
@@ -29,29 +30,44 @@ async function post(req, res) {
   })
 }
 
-async function put(req, res){
+async function put(req, res) {
   const { id } = req.params
 
+  const product = await ProductsModel.findOneAndUpdate({ _id: id }, req.body, { new: true })
+
+  res.send({
+    message: 'success',
+    product,
+  })
+
   /* 
-  const product = await ProductsModel.findOne({_id: id})
+  const product = await ProductsModel.findOne({ _id: id })
 
   await product.updateOne(req.body)
 
   res.send({
-    message: "sucess",
+    message: 'success',
     product,
-  }) */
+  })
+  */
+}
 
-  const product = await ProductsModel.findOneAndUpdate({_id: id}, req.body, {new: true})
+async function remove(req, res) {
+  const { id } = req.params
+
+  const remove = await ProductsModel.deleteOne({ _id: id })
+  
+  const message = remove.deletedCount ? 'success' : 'error'
 
   res.send({
-    message: 'sucess',
-    product
+    remove,
+    message,
   })
 }
 
 module.exports = {
   get,
   post,
-  put
+  put,
+  remove,
 }
